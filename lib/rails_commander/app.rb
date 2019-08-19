@@ -26,5 +26,16 @@ module RailsCommander
     def stop
       Process.kill('TERM', @pid)
     end
+
+    def db_reset
+      Dir.chdir(@path) do
+        pid = Process.spawn(
+          'bundle exec ./bin/rails db:reset',
+          unsetenv_others: true,
+          %i[out err] => [config.log_path, 'w']
+        )
+        Process.wait(pid)
+      end
+    end
   end
 end
