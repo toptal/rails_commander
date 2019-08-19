@@ -15,7 +15,11 @@ module RailsCommander
 
     def start
       Dir.chdir(@path) do
-        @pid = Process.spawn(config.cmd_start, %i[out err] => [config.log_path, 'w'])
+        @pid = Process.spawn(
+          config.cmd_start,
+          unsetenv_others: true,
+          %i[out err] => [config.log_path, 'w']
+        )
       end
     end
 

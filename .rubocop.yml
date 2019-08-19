@@ -1,4 +1,6 @@
 AllCops:
+  Exclude:
+    - 'spec/support/bookstore/**/*'
   TargetRubyVersion: 2.5
 Documentation:
   Enabled: false

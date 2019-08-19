@@ -5,7 +5,7 @@ module RailsCommander
     def initialize(*)
       super
       self.log_path ||= '/tmp/rails_commander.log'
-      self.cmd_start ||= 'bundle exec rails s'
+      self.cmd_start ||= 'bundle exec ./bin/rails s'
     end
   end
 end
