@@ -17,7 +17,7 @@ module RailsCommander
       Dir.chdir(@path) do
         @pid = Process.spawn(
           config.cmd_start,
-          unsetenv_others: true,
+          unsetenv_others: config.unset_env_vars,
           %i[out err] => [config.log_path, 'w']
         )
       end
@@ -31,7 +31,7 @@ module RailsCommander
       Dir.chdir(@path) do
         pid = Process.spawn(
           'bundle exec ./bin/rails db:reset',
-          unsetenv_others: true,
+          unsetenv_others: config.unset_env_vars,
           %i[out err] => [config.log_path, 'w']
         )
         Process.wait(pid)

@@ -1,13 +1,15 @@
-# WORK IN PROGRESS !!
-
 `RailsCommander` is a library that allows the programmatical control over Rails process. It's a Ruby wrapper for Rails' CLI interface.
 
 Typical use case can be a CI job definition that, among many other steps, requires a spin-up of a Rails app, that is a part of a bigger system under test.
 
 ```ruby
-app = RailsCommander::App.new('/path/to/rails/application')
+config = RailsCommander::Config.new(
+  port: 3003
+  env: 'cucumber'
+)
+app = RailsCommander::App.new('/path/to/rails/application', config)
 app.db_reset  # bundle exec rails db:reset
-app.start     # bundle exec rails s
+app.start     # bundle exec rails server with given port, env, etc
 app.stop      # kill the rails process created with start method
 ```
 

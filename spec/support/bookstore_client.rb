@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BookstoreClient
   def initialize(url)
     @url = url
