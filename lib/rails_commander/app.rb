@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'shellwords'
+
 require_relative './config'
 
 module RailsCommander
@@ -31,9 +33,8 @@ module RailsCommander
       return false unless pid
 
       begin
-        Process.getpgid(pid)
-        true
-      rescue Errno::ESRCH
+        !Process.waitpid(pid, Process::WNOHANG)
+      rescue Errno::ECHILD
         false
       end
     end
@@ -42,9 +43,12 @@ module RailsCommander
       return unless running?
 
       Process.kill('TERM', @pid)
+      _pid, status = Process.wait2(pid)
+      status
     end
 
     def task(task)
+      status = nil
       Dir.chdir(@path) do
         pid = Process.spawn(
           config.env_vars,
@@ -53,12 +57,17 @@ module RailsCommander
           out: [config.out_path, 'w'],
           err: [config.err_path, 'w']
         )
-        Process.wait(pid)
+        _pid, status = Process.wait2(pid)
       end
+      status
     end
 
-    def db_reset
-      task('db:reset')
+    def stderr
+      ::File.read(config.err_path)
+    end
+
+    def stdout
+      ::File.read(config.out_path)
     end
   end
 end

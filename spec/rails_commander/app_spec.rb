@@ -13,10 +13,17 @@ RSpec.describe RailsCommander::App do
 
   describe 'start and stop the rails process' do
     specify do
-      expect do
-        app.start
-        app.stop
-      end.not_to raise_error
+      app.start
+      expect(app).to be_running
+      app.stop
+      expect(app).not_to be_running
+    end
+  end
+
+  describe 'run a rake task' do
+    specify do
+      app.task('--tasks')
+      expect(app.stdout).to include('Migrate the database')
     end
   end
 
@@ -25,11 +32,11 @@ RSpec.describe RailsCommander::App do
     after(:example) { app.stop }
 
     specify do
-      app.db_reset
+      app.task('db:reset')
       expect(client.data.count).to eq(2)
       client.delete_book(1)
       expect(client.data.count).to eq(1)
-      app.db_reset
+      app.task('db:reset')
       expect(client.data.count).to eq(2)
     end
   end
@@ -41,7 +48,7 @@ RSpec.describe RailsCommander::App do
     after(:example) { app.stop }
 
     specify do
-      app.db_reset
+      app.task('db:reset')
       expect(client.data.count).to eq(2)
     end
   end
