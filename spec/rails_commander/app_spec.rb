@@ -8,7 +8,7 @@ require_relative '../support/bookstore_client'
 RSpec.describe RailsCommander::App do
   let(:app) { RailsCommander::App.new("#{__dir__}/../support/bookstore", config) }
   let(:client) { BookstoreClient.new("http://localhost:#{port}") }
-  let(:config) { nil }
+  let(:config) { RailsCommander::Config.new(env_vars: { 'BUNDLE_GEMFILE' => nil }) }
   let(:port) { 3000 }
 
   describe 'start and stop the rails process' do
@@ -42,7 +42,7 @@ RSpec.describe RailsCommander::App do
   end
 
   describe 'use custom port' do
-    let(:config) { RailsCommander::Config.new(port: port) }
+    let(:config) { RailsCommander::Config.new(port: port, env_vars: { 'BUNDLE_GEMFILE' => nil }) }
     let(:port) { 3004 }
     before(:example) { app.start }
     after(:example) { app.stop }

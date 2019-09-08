@@ -23,7 +23,7 @@ module RailsCommander
       self.err_path ||= "/tmp/rails_commander_#{log_prefix}_err.log"
       self.rails_env ||= 'development'
       self.port ||= 3000
-      self.unset_env_vars ||= true
+      self.unset_env_vars ||= false
       self.env_vars ||= {}
       self.cmd_start ||= 'bundle exec ./bin/rails s'\
                         " --port=#{::Shellwords.escape(self.port)}"\

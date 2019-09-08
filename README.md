@@ -5,7 +5,7 @@ Typical use case can be a CI job definition that, among many other steps, requir
 ```ruby
 config = RailsCommander::Config.new(
   port: 3004                  # default: 3000
-  pidfile: '/tmp/server.pid'  # default: ./temp/pids/server.pid
+  pidfile: '/tmp/server.pid'  # default: ./tmp/pids/server.pid
   out_path: '/tmp/stdout.log' # default: a new tmp file
   err_path: '/tmp/stderr.log' # default: a new tmp file
   env_vars: { 'DEBUG': 1 }    # default: {}
@@ -26,6 +26,17 @@ app.running?         # check if process is running
 
 # or just use default config to run take tasks, without starting the server
 RailsCommander::App.new('/path/to/rails/application').task('db:migrate')
+```
+
+# Possible caveats
+
+Even though the commands are executed in the another process, in Rails' apps directory, the `bundler` context may be inherited
+from the parent process through the environment variables, causing errors about missing gems.
+
+If this happens unset `BUNDLE_GEMFILE` env variable in the config object before starting the app.
+
+```ruby
+RailsCommander::Config.new(env_vars: { 'BUNDLE_GEMFILE' => nil })
 ```
 
 # Testing

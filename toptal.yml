@@ -1,0 +1,11 @@
+owner:
+  name: Billing Extraction
+  url: https://team.toptal.net/users?team_id=121
+  channel: '#-billing-x-core'
+
+app:
+  production:
+  staging:
+
+technology:
+  - ruby
