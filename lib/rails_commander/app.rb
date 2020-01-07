@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'shellwords'
+require 'faraday'
 
 require_relative './config'
 
@@ -37,6 +38,23 @@ module RailsCommander
       rescue Errno::ECHILD
         false
       end
+    end
+
+    def ready?
+      Faraday.get("http://localhost:#{config.port}")
+    rescue StandardError
+      false
+    else
+      true
+    end
+
+    def wait_until_ready(timeout: 3, retry_interval: 0.2)
+      start = Time.now
+      while (!ready?)
+        return true if (Time.now - start).to_i >= timeout
+        sleep(retry_interval)
+      end
+      false
     end
 
     def stop

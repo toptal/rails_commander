@@ -15,8 +15,11 @@ RSpec.describe RailsCommander::App do
     specify do
       app.start
       expect(app).to be_running
+      app.wait_until_ready
+      expect(app).to be_ready
       app.stop
       expect(app).not_to be_running
+      expect(app).not_to be_ready
     end
   end
 
