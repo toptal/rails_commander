@@ -51,10 +51,10 @@ module RailsCommander
     def wait_until_ready(timeout: 3, retry_interval: 0.2)
       start = Time.now
       while (!ready?)
-        return true if (Time.now - start).to_i >= timeout
+        return false if (Time.now - start).to_i >= timeout
         sleep(retry_interval)
       end
-      false
+      true
     end
 
     def stop
