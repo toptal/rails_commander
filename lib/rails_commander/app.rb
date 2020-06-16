@@ -50,8 +50,9 @@ module RailsCommander
 
     def wait_until_ready(timeout: 3, retry_interval: 0.2)
       start = Time.now
-      while (!ready?)
+      until ready?
         return false if (Time.now - start).to_i >= timeout
+
         sleep(retry_interval)
       end
       true
@@ -70,7 +71,7 @@ module RailsCommander
       Dir.chdir(@path) do
         pid = Process.spawn(
           config.env_vars,
-          "bundle exec ./bin/rails #{task}",
+          "bundle exec rails #{task}",
           unsetenv_others: config.unset_env_vars,
           out: [config.out_path, 'w'],
           err: [config.err_path, 'w']

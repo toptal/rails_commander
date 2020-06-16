@@ -4,7 +4,7 @@ $LOAD_PATH.push File.expand_path('lib', __dir__)
 
 Gem::Specification.new do |s|
   s.name        = 'rails_commander'
-  s.version     = '0.0.1'
+  s.version     = '0.0.2'
   s.author      = 'Bartek Wilczek'
   s.email       = 'bwilczek@gmail.com'
   s.homepage    = 'http://github.com/bwilczek/rails_commander'

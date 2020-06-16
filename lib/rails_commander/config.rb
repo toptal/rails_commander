@@ -25,7 +25,7 @@ module RailsCommander
       self.port ||= 3000
       self.unset_env_vars ||= false
       self.env_vars ||= {}
-      self.cmd_start ||= 'bundle exec ./bin/rails s'\
+      self.cmd_start ||= 'bundle exec rails s'\
                         " --port=#{::Shellwords.escape(self.port)}"\
                         " --pid=#{::Shellwords.escape(self.pidfile)}"\
                         " --environment=#{::Shellwords.escape(self.rails_env)}"
