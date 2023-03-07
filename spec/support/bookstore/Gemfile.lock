@@ -101,7 +101,8 @@ GEM
     nio4r (2.5.8)
     nokogiri (1.14.2-x86_64-linux)
       racc (~> 1.4)
-    puma (3.12.6)
+    puma (4.3.12)
+      nio4r (~> 2.0)
     racc (1.6.2)
     rack (2.2.6.3)
     rack-test (2.0.2)
@@ -149,7 +150,7 @@ PLATFORMS
 DEPENDENCIES
   byebug
   mysql2
-  puma (~> 3.11)
+  puma (~> 4.3)
   rails (~> 7)
   sqlite3
   tzinfo-data
