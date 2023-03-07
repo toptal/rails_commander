@@ -32,6 +32,6 @@ jobs:
       env:
         BUNDLE_GITHUB__COM: x-access-token:${{secrets.TOPTAL_DEVBOT_TOKEN}}
       run:
-        bundle install
+        bundle install && cd spec/support/bookstore && bundle install
     - name: Run tests
       run: bundle exec rspec
