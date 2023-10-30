@@ -2,13 +2,16 @@ name: CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     strategy:
       matrix:
         ruby-version: ['3.0.4', '3.2']
@@ -23,15 +26,28 @@ jobs:
           MYSQL_USER: bookstore
           MYSQL_PASSWORD: bookstore
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ matrix.ruby-version }}
-    - name: Install dependencies
-      env:
-        BUNDLE_GITHUB__COM: x-access-token:${{secrets.TOPTAL_DEVBOT_TOKEN}}
-      run:
-        bundle install && cd spec/support/bookstore && bundle install
-    - name: Run tests
-      run: bundle exec rspec
+      - uses: actions/checkout@v2
+      - name: GSM Secrets
+        id: secrets_manager
+        uses: toptal/actions/gsm-secrets@main
+        with:
+          workload_identity_provider: projects/858873486241/locations/global/workloadIdentityPools/gha-pool/providers/github-com
+          service_account: gha-rails-commander@toptal-ci.iam.gserviceaccount.com
+          secrets_name: |-
+            TOPTAL_DEVBOT_TOKEN:toptal-ci/TOPTAL_DEVBOT_TOKEN
+                
+      - name: Parse secrets
+        id: parse_secrets
+        uses: toptal/actions/expose-json-outputs@main
+        with:
+          json: ${{ steps.secrets_manager.outputs.secrets }}
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+      - name: Install dependencies
+        env:
+          BUNDLE_GITHUB__COM: x-access-token:${{steps.parse_secrets.outputs.TOPTAL_DEVBOT_TOKEN}}
+        run: bundle install && cd spec/support/bookstore && bundle install
+      - name: Run tests
+        run: bundle exec rspec
